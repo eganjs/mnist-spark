@@ -32,7 +32,7 @@ object MNISTDataset {
   }
 
   private def popBigEndianInt(bytes: FileBytesIterator): Int = {
-    bytes.take(4).grouped(4).map(e => e(0) << 24 | e(1) << 16 | e(2) << 8 | e(3)).next()
+    bytes.take(4).grouped(4).map(e => e.head << 24 | e(1) << 16 | e(2) << 8 | e(3)).next()
   }
 
   private def verifyFileType(bytes: FileBytesIterator, expectedType: Int): Unit = {

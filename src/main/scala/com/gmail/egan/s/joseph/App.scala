@@ -1,21 +1,30 @@
 package com.gmail.egan.s.joseph
 
+import org.apache.spark.ml.feature.LabeledPoint
+import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.ml.regression.GeneralizedLinearRegression
+import org.apache.spark.sql.SparkSession
+
 object App {
   def main(args: Array[String]): Unit = {
-
-    def printImg(image: Array[Byte], xLen: Int, yLen: Int): Unit = {
-      for (y <- 0 until yLen) {
-        for (x <- 0 until xLen) {
-          printf("%4d", image(x + (y * xLen)))
-        }
-        println()
-      }
-    }
-
     val trainingData: MNISTData = MNISTDataset.trainingData.read()
-    trainingData.images.take(10).foreach(image => {
-      println("num: " + image.label)
-      printImg(image.data, trainingData.imageWidth, trainingData.imageHeight)
-    })
+
+    val ss = SparkSession.builder().master("local[4]").appName("MNIST").getOrCreate()
+
+    import ss.implicits._
+
+    val data = trainingData.images.toSeq.map { image =>
+      LabeledPoint(
+        image.label,
+        Vectors.dense(image.data.map { b => (b & 0xFF).toDouble })
+      )
+    }.toDF
+
+    data.show(5)
+
+    val glr = new GeneralizedLinearRegression()
+    val model = glr.fit(data.as[LabeledPoint])
+
+    ss.stop()
   }
 }
