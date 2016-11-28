@@ -42,27 +42,30 @@ object MNISTDataset {
   }
 
   private def verifyNumberOfElements(mnistFile1: FileBytesIterator, mnistFile2: FileBytesIterator): Unit = {
-    val mnistFile1Elements = popBigEndianInt(mnistFile1)
-    val mnistFile2Elements = popBigEndianInt(mnistFile2)
+    val mnistFile1Elements = 0xFFFF & popBigEndianInt(mnistFile1)
+    val mnistFile2Elements = 0xFFFF & popBigEndianInt(mnistFile2)
     if (mnistFile1Elements != mnistFile2Elements)
       throw new InvalidMNISTPairException("number of labels and images differ")
   }
 
   private def read(labelsFilePath: String, imagesFilePath: String): MNISTData = {
-    val labelsFile = readFile(labelsFilePath)
-    val imagesFile = readFile(imagesFilePath)
+    val labelsFile: FileBytesIterator = readFile(labelsFilePath)
+    val imagesFile: FileBytesIterator = readFile(imagesFilePath)
 
     verifyFileType(labelsFile, labelsFileType)
     verifyFileType(imagesFile, imagesFileType)
     verifyNumberOfElements(labelsFile, imagesFile)
 
-    val labels = labelsFile
+    val labels: Iterator[Byte] = labelsFile
 
     val imageHeight = popBigEndianInt(imagesFile)
     val imageWidth = popBigEndianInt(imagesFile)
-    val images = imagesFile.grouped(imageHeight * imageWidth).map(_.toArray)
+    val images: Iterator[Array[Byte]] = imagesFile.grouped(imageHeight * imageWidth).map(_.toArray)
 
-    val labelledImages = (labels, images).zipped.map(new MNISTImage(_, _))
+    val labelledImages = labels.zip(images).map { case (label: Byte, image: Array[Byte]) =>
+      new MNISTImage(label, image)
+    }.toIterable
+
     new MNISTData(labelledImages, imageHeight, imageWidth)
   }
 }
