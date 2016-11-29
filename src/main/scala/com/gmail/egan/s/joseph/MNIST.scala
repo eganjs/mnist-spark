@@ -17,13 +17,13 @@ class MNISTDataset(labelsFilePath: String, imagesFilePath: String) {
 }
 
 object MNISTDataset {
-  private val labelsFileType = 2049
-  private val imagesFileType = 2051
+  private val LabelsFileType = 2049
+  private val ImagesFileType = 2051
 
   private val baseDir = "resources/"
 
-  val trainingData: MNISTDataset = new MNISTDataset("train-labels-idx1-ubyte", "train-images-idx3-ubyte")
-  val testData: MNISTDataset = new MNISTDataset("t10k-labels-idx1-ubyte", "t10k-images-idx3-ubyte")
+  val TrainingData: MNISTDataset = new MNISTDataset("train-labels-idx1-ubyte", "train-images-idx3-ubyte")
+  val TestData: MNISTDataset = new MNISTDataset("t10k-labels-idx1-ubyte", "t10k-images-idx3-ubyte")
 
   private type FileBytesIterator = Iterator[Byte]
 
@@ -52,8 +52,8 @@ object MNISTDataset {
     val labelsFile: FileBytesIterator = readFile(labelsFilePath)
     val imagesFile: FileBytesIterator = readFile(imagesFilePath)
 
-    verifyFileType(labelsFile, labelsFileType)
-    verifyFileType(imagesFile, imagesFileType)
+    verifyFileType(labelsFile, LabelsFileType)
+    verifyFileType(imagesFile, ImagesFileType)
     verifyNumberOfElements(labelsFile, imagesFile)
 
     val labels: Iterator[Byte] = labelsFile
