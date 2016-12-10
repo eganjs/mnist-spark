@@ -1,4 +1,4 @@
-package com.gmail.egan.s.joseph
+package com.gmail.egan.s.joseph.spark.transform
 
 import org.apache.spark.ml.UnaryTransformer
 import org.apache.spark.ml.linalg.{SQLDataTypes, SparseVector, Vector}
@@ -15,7 +15,9 @@ class AffineTransformer(override val uid: String) extends UnaryTransformer[Vecto
   private var (xShift, yShift: Double) = (0d, 0d)
 
   def setDimensions(x: Int, y: Int): AffineTransformer = {
+    // @formatter:off
     this.xLen = x; this.yLen = y
+    // @formatter:on
     this
   }
 
@@ -24,37 +26,47 @@ class AffineTransformer(override val uid: String) extends UnaryTransformer[Vecto
                          xShear: Double, yScale: Double,
                          xShift: Double, yShift: Double
                        ): AffineTransformer = {
+    // @formatter:off
     this.xScale = xScale; this.yShear = yShear
     this.xShear = xShear; this.yScale = yScale
     this.xShift = xShift; this.yShift = yShift
+    // @formatter:on
     this
   }
 
   def setScaleTransformation(xScale: Double, yScale: Double): this.type = {
+    // @formatter:off
     this.xScale = xScale; this.yShear = 0
     this.xShear = 0; this.yScale = yScale
     this.xShift = 0; this.yShift = 0
+    // @formatter:on
     this
   }
 
   def setShearTransformation(xShear: Double, yShear: Double): this.type = {
+    // @formatter:off
     this.xScale = 1; this.yShear = yShear
     this.xShear = xShear; this.yScale = 1
     this.xShift = 0; this.yShift = 0
+    // @formatter:on
     this
   }
 
   def setShiftTransformation(xShift: Double, yShift: Double): this.type = {
+    // @formatter:off
     this.xScale = 1; this.yShear = 0
     this.xShear = 0; this.yScale = 1
     this.xShift = xShift; this.yShift = yShift
+    // @formatter:on
     this
   }
 
   def setRotationTransformation(clockwiseRotationInRadians: Double): this.type = {
+    // @formatter:off
     this.xScale =  Math.cos(clockwiseRotationInRadians); this.yShear = Math.sin(clockwiseRotationInRadians)
     this.xShear = -Math.sin(clockwiseRotationInRadians); this.yScale = Math.cos(clockwiseRotationInRadians)
     this.xShift = 0; this.yShift = 0
+    // @formatter:on
     this
   }
 

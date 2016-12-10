@@ -1,4 +1,4 @@
-package com.gmail.egan.s.joseph
+package com.gmail.egan.s.joseph.mnist
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.ml.Pipeline
@@ -7,7 +7,7 @@ import org.apache.spark.ml.feature.{IndexToString, PCA, StringIndexer}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.storage.StorageLevel
 
-object Train {
+object TrainApp {
   def main(args: Array[String]): Unit = {
     Logger.getLogger("org.apache.spark").setLevel(Level.OFF)
 
@@ -15,7 +15,7 @@ object Train {
       SparkSession
         .builder
         .master("local[*]")
-        .appName("MNIST")
+        .appName("MNIST:Train")
         .getOrCreate()
     }
 

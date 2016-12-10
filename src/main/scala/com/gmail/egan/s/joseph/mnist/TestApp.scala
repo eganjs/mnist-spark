@@ -1,4 +1,4 @@
-package com.gmail.egan.s.joseph
+package com.gmail.egan.s.joseph.mnist
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.ml.PipelineModel
@@ -6,7 +6,7 @@ import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.storage.StorageLevel
 
-object Test {
+object TestApp {
   def main(args: Array[String]): Unit = {
     Logger.getLogger("org.apache.spark").setLevel(Level.OFF)
 
